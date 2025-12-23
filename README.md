@@ -7,6 +7,7 @@ Cây thông Noel 3D tương tác với điều khiển bằng cử chỉ tay, s�
 - **🎨 Particle System 3D**: 4000+ particles với hiệu ứng bloom và lighting chuyên nghiệp
 - **👋 Hand Gesture Control**: Điều khiển bằng cử chỉ tay qua webcam
 - **📷 Photo Upload**: Thêm ảnh của bạn vào cây thông 3D
+- **🎵 Background Music**: Music player với Jingle Bells và volume control
 - **🎭 3 Chế độ hiển thị**:
   - 🎄 **TREE Mode**: Particles tạo hình cây thông xoay tròn
   - ✨ **SCATTER Mode**: Particles phân tán trong không gian 3D
@@ -33,8 +34,22 @@ Cây thông Noel 3D tương tác với điều khiển bằng cử chỉ tay, s�
 2. Chọn một hoặc nhiều ảnh từ máy tính
 3. Ảnh sẽ xuất hiện trong cây thông với khung vàng đồng
 
+### 🎵 Nhạc nền
+Ứng dụng có music player với Jingle Bells (hoặc nhạc Noel miễn phí):
+
+1. **Phát nhạc**: Click nút "Phát nhạc" ở góc dưới trái
+2. **Điều chỉnh âm lượng**: Kéo thanh trượt Volume
+3. **Trạng thái**: Icon thay đổi theo volume (🔇🔉🔊)
+4. **Tự động lưu**: Settings được lưu vào localStorage
+
+**Download nhạc Jingle Bells:**
+- Tải file mp3 từ nguồn miễn phí ([Incompetech](https://incompetech.com), [Bensound](https://www.bensound.com))
+- Đặt tên: `jingle-bells.mp3`
+- Lưu cùng thư mục với `noel_v2.html`
+- Nếu không có file, sẽ dùng nhạc Noel mặc định từ CDN
+
 ### Phím tắt
-- **H**: Ẩn/hiện các nút điều khiển
+- **H**: Ẩn/hiện các nút điều khiển (bao gồm music controls)
 
 ## 🖥️ Yêu cầu hệ thống
 

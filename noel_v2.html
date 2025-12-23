@@ -99,6 +99,83 @@
             overflow: hidden; opacity: 0; /* Hidden by default but functional */
             pointer-events: none;
         }
+
+        /* Music Controls */
+        #music-controls {
+            position: absolute; bottom: 40px; left: 40px;
+            pointer-events: auto;
+            display: flex; flex-direction: column; gap: 15px;
+            transition: opacity 0.5s ease;
+        }
+        .music-btn {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: #d4af37;
+            padding: 12px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            transition: all 0.4s;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Times New Roman', serif;
+        }
+        .music-btn:hover {
+            background: #d4af37;
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        .music-icon {
+            font-size: 14px;
+        }
+        .volume-control {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            padding: 10px 15px;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 3px;
+            background: rgba(212, 175, 55, 0.3);
+            outline: none;
+            border-radius: 2px;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #d4af37;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .volume-slider::-webkit-slider-thumb:hover {
+            background: #ffd966;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #d4af37;
+            cursor: pointer;
+            border: none;
+            border-radius: 50%;
+        }
+        .volume-label {
+            color: #d4af37;
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
     </style>
     
     <style>
@@ -140,6 +217,32 @@
     <div id="webcam-wrapper">
         <video id="webcam" autoplay playsinline style="display:none;"></video>
         <canvas id="webcam-preview"></canvas>
+    </div>
+
+    <!-- Music Player -->
+    <!--
+        INSTRUCTIONS: Download Jingle Bells (free version) from:
+        - https://www.bensound.com/royalty-free-music
+        - https://incompetech.com/music/royalty-free/
+        - Or search "Jingle Bells public domain mp3"
+        Save as "jingle-bells.mp3" in the same folder as this HTML file
+    -->
+    <audio id="bg-music" loop>
+        <source src="jingle-bells.mp3" type="audio/mpeg">
+        <!-- Fallback CDN - Christmas music (not Jingle Bells but royalty-free) -->
+        <source src="https://cdn.pixabay.com/download/audio/2021/11/23/audio_d1718ab41b.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Controls -->
+    <div id="music-controls">
+        <button class="music-btn" id="music-toggle">
+            <span class="music-icon">🔇</span>
+            <span id="music-status">Phát nhạc</span>
+        </button>
+        <div class="volume-control">
+            <span class="volume-label">Vol</span>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="50">
+        </div>
     </div>
 
     <script type="module">
@@ -579,12 +682,92 @@
                 composer.setSize(window.innerWidth, window.innerHeight);
             });
             document.getElementById('file-input').addEventListener('change', handleImageUpload);
-            
+
             // Toggle UI logic - ONLY hide controls, keep title
             window.addEventListener('keydown', (e) => {
                 if (e.key.toLowerCase() === 'h') {
                     const controls = document.querySelector('.upload-wrapper');
                     if (controls) controls.classList.toggle('ui-hidden');
+                }
+            });
+
+            // Music Controls
+            const bgMusic = document.getElementById('bg-music');
+            const musicToggle = document.getElementById('music-toggle');
+            const musicStatus = document.getElementById('music-status');
+            const musicIcon = document.querySelector('.music-icon');
+            const volumeSlider = document.getElementById('volume-slider');
+
+            // Set initial volume
+            bgMusic.volume = 0.5;
+
+            // Load saved music state from localStorage
+            const savedMusicState = localStorage.getItem('musicPlaying');
+            const savedVolume = localStorage.getItem('musicVolume');
+
+            if (savedVolume) {
+                bgMusic.volume = parseFloat(savedVolume);
+                volumeSlider.value = parseFloat(savedVolume) * 100;
+            }
+
+            // Music toggle button
+            musicToggle.addEventListener('click', async () => {
+                if (bgMusic.paused) {
+                    try {
+                        await bgMusic.play();
+                        musicStatus.textContent = 'Tắt nhạc';
+                        musicIcon.textContent = '🔊';
+                        localStorage.setItem('musicPlaying', 'true');
+                    } catch (err) {
+                        console.warn('Autoplay blocked:', err);
+                        musicStatus.textContent = 'Phát nhạc';
+                        musicIcon.textContent = '🔇';
+                    }
+                } else {
+                    bgMusic.pause();
+                    musicStatus.textContent = 'Phát nhạc';
+                    musicIcon.textContent = '🔇';
+                    localStorage.setItem('musicPlaying', 'false');
+                }
+            });
+
+            // Volume control
+            volumeSlider.addEventListener('input', (e) => {
+                const volume = e.target.value / 100;
+                bgMusic.volume = volume;
+                localStorage.setItem('musicVolume', volume);
+
+                // Update icon based on volume
+                if (volume === 0) {
+                    musicIcon.textContent = '🔇';
+                } else if (volume < 0.5) {
+                    musicIcon.textContent = '🔉';
+                } else {
+                    musicIcon.textContent = '🔊';
+                }
+            });
+
+            // Auto-play music if previously playing (with user interaction)
+            if (savedMusicState === 'true') {
+                // Try to autoplay after a short delay (after user has interacted with page)
+                window.addEventListener('click', async () => {
+                    if (bgMusic.paused) {
+                        try {
+                            await bgMusic.play();
+                            musicStatus.textContent = 'Tắt nhạc';
+                            musicIcon.textContent = '🔊';
+                        } catch (err) {
+                            // Autoplay still blocked, user needs to click music button
+                        }
+                    }
+                }, { once: true });
+            }
+
+            // Hide music controls with 'H' key
+            window.addEventListener('keydown', (e) => {
+                if (e.key.toLowerCase() === 'h') {
+                    const musicControls = document.getElementById('music-controls');
+                    if (musicControls) musicControls.classList.toggle('ui-hidden');
                 }
             });
         }
