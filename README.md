@@ -42,12 +42,6 @@ Cây thông Noel 3D tương tác với điều khiển bằng cử chỉ tay, s�
 3. **Trạng thái**: Icon thay đổi theo volume (🔇🔉🔊)
 4. **Tự động lưu**: Settings được lưu vào localStorage
 
-**Download nhạc Jingle Bells:**
-- Tải file mp3 từ nguồn miễn phí ([Incompetech](https://incompetech.com), [Bensound](https://www.bensound.com))
-- Đặt tên: `jingle-bells.mp3`
-- Lưu cùng thư mục với `noel_v2.html`
-- Nếu không có file, sẽ dùng nhạc Noel mặc định từ CDN
-
 ### Phím tắt
 - **H**: Ẩn/hiện các nút điều khiển (bao gồm music controls)
 
@@ -80,84 +74,6 @@ Cây thông Noel 3D tương tác với điều khiển bằng cử chỉ tay, s�
 - **2500 dust particles**: Hiệu ứng tuyết rơi
 - **Dynamic positioning**: 3 thuật toán khác nhau cho 3 modes
 - **Smooth transitions**: Lerp-based animation giữa các modes
-
-### Gesture Recognition
-```
-Pinch Distance < 0.05    → FOCUS Mode
-Hand Closed < 0.25       → TREE Mode
-Hand Open > 0.4          → SCATTER Mode
-```
-
-### Performance
-- **Rendering**: WebGL with hardware acceleration
-- **Frame rate**: Target 60 FPS
-- **Particle count**: Tối ưu cho desktop (có thể giảm trên mobile)
-- **Texture**: Procedural candy cane pattern
-
-## 🔧 Cấu hình nâng cao
-
-Chỉnh sửa trong code `noel_v2.html`:
-
-```javascript
-const CONFIG = {
-    particles: {
-        count: 1500,        // Số lượng ornaments
-        dustCount: 2500,    // Số lượng dust particles
-        treeHeight: 24,     // Chiều cao cây
-        treeRadius: 8       // Bán kính cây
-    },
-    camera: {
-        z: 50              // Khoảng cách camera
-    }
-};
-```
-
-## 🐛 Troubleshooting
-
-### Camera không hoạt động
-- Kiểm tra quyền truy cập camera trong browser settings
-- Thử reload trang và cho phép lại
-- Kiểm tra camera có đang được dùng bởi app khác không
-
-### FPS thấp / Lag
-- Giảm `CONFIG.particles.count` xuống 500-800
-- Giảm `CONFIG.particles.dustCount` xuống 1000
-- Tắt các tab/app khác đang chạy
-- Thử trình duyệt khác hoặc cập nhật driver GPU
-
-### Gesture không nhận diện
-- Đảm bảo đủ ánh sáng
-- Đưa tay vào giữa khung hình
-- Tránh background phức tạp
-- Thử gesture rõ ràng hơn
-
-### Ảnh không upload được
-- Kiểm tra định dạng ảnh (JPG, PNG, GIF, WebP)
-- Kích thước ảnh nên < 5MB
-- Thử upload từng ảnh một
-
-## 📝 Known Issues
-
-- [ ] Chưa có fallback controls khi không có camera
-- [ ] Chưa tối ưu cho mobile/touch
-- [ ] Memory leak khi upload quá nhiều ảnh (>50)
-- [ ] Safari có thể lag hơn Chrome
-
-## 🎯 Roadmap
-
-- [ ] Thêm keyboard/mouse controls cho non-camera devices
-- [ ] Mobile touch support
-- [ ] Theme switcher (classic, blue, purple)
-- [ ] Background music toggle
-- [ ] Save/share screenshot feature
-- [ ] Performance mode cho low-end devices
-
-## 👏 Credits
-
-- **Original Code**: Tìm được và fix lại bởi [anhduc.onlien](https://anhduc.onlien)
-- **Three.js**: [mrdoob](https://github.com/mrdoob) và contributors
-- **MediaPipe**: Google MediaPipe team
-- **Font**: [Cinzel](https://fonts.google.com/specimen/Cinzel) by Natanael Gama
 
 ## 📄 License
 
